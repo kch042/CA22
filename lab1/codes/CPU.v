@@ -28,6 +28,7 @@ wire    [31:0]  instruction, instruction_id;
 wire    [31:0]  rs1, rs1_exe;
 wire    [31:0]  rs2, rs2_exe, rs2_mem;
 wire    [31:0]  imm, imm_exe;
+wire    [4:0]   rs1_addr, rs1_addr_exe, rs2_addr, rs2_addr_exe;   
 wire    [4:0]   rd_addr, rd_addr_exe, rd_addr_mem, rd_addr_wb;
 
 // Control Signal
@@ -39,6 +40,9 @@ wire            mem2reg, mem2reg_exe, mem2reg_mem, mem2reg_wb;
 wire            regwrite, regwrite_exe, regwrite_mem, regwrite_wb;
 
 // ALU
+wire    [1:0]   forwardA, forwardB;
+wire    [31:0]  alu_op1, alu_op2_before_imm, alu_op2;
+wire            is_zero;
 wire    [31:0]  alu_result, alu_result_mem, alu_result_wb;
 
 // Mem
@@ -48,6 +52,8 @@ wire    [31:0]  mem_result, mem_result_wb;
 wire    [31:0]  rd_data;
 
 /*******************************************************/ 
+
+// IF
 
 Adder Add_PC(
     .data1_i    (pc),
@@ -77,10 +83,16 @@ IF_ID IF_ID(
 
 /*******************************************************/ 
 
+// ID
+
+assign  rs1_addr =  instruction_id[19:15];
+assign  rs2_addr =  instruction_id[24:20];
+assign  rd_addr  =  instruction_id[11:7];
+
 Registers Registers(
     .clk_i      (clk_i),
-    .RS1addr_i  (instruction_id[19:15]),
-    .RS2addr_i  (instruction_id[24:20]),
+    .RS1addr_i  (rs1_addr),
+    .RS2addr_i  (rs2_addr),
     .RDaddr_i   (rd_addr_wb),           // be careful !
     .RDdata_i   (rd_data),
     .RegWrite_i (regwrite_wb),
@@ -107,25 +119,48 @@ Control Control(
 
 ID_EXE ID_EXE(
     .clk(clk_i), 
-    .rs1_in(rs1), .rs2_in(rs2), .rd_addr_in(instruction_id[11:7]), .imm_in(imm), .aluctrl_in(aluctrl), .alusrc_in(alusrc), .memwrite_in(memwrite), .memread_in(memread), .mem2reg_in(mem2reg), .regwrite_in(regwrite),
-    .rs1_out(rs1_exe), .rs2_out(rs2_exe), .rd_addr_out(rd_addr_exe), .imm_out(imm_exe), .aluctrl_out(aluctrl_exe), .alusrc_out(alusrc_exe), .memwrite_out(memwrite_exe), .memread_out(memread_exe), .mem2reg_out(mem2reg_exe), .regwrite_out(regwrite_exe)
+    .rs1_in(rs1), .rs2_in(rs2), .rs1_addr_in(rs1_addr), .rs2_addr_in(rs2_addr), .rd_addr_in(rd_addr), .imm_in(imm), .aluctrl_in(aluctrl), .alusrc_in(alusrc), .memwrite_in(memwrite), .memread_in(memread), .mem2reg_in(mem2reg), .regwrite_in(regwrite),
+    .rs1_out(rs1_exe), .rs2_out(rs2_exe), .rs1_addr_out(rs1_addr_exe), .rs2_addr_out(rs2_addr_exe), .rd_addr_out(rd_addr_exe), .imm_out(imm_exe), .aluctrl_out(aluctrl_exe), .alusrc_out(alusrc_exe), .memwrite_out(memwrite_exe), .memread_out(memread_exe), .mem2reg_out(mem2reg_exe), .regwrite_out(regwrite_exe)
 );
 
 /*******************************************************/ 
 
-// ALU
-wire [31:0] alu_op1;
-wire [31:0] alu_op2;
-wire        is_zero;
+// EXE
 
-assign alu_op1 = rs1_exe;
+Forwarding Forwarding(
+    .rs1_addr_exe(rs1_addr_exe), .rs2_addr_exe(rs2_addr_exe),
+    .rd_addr_mem(rd_addr_mem), .rd_addr_wb(rd_addr_wb),
+    .regwrite_mem(regwrite_mem), .regwrite_wb(regwrite_wb),
+    .forwardA(forwardA), .forwardB(forwardB)
+);
 
-Mux_2_way M2_ALU(
+
+
+// don't care
+parameter   [31:0]  dotcar = {31{1'b0}};
+Mux_4_way M4_ForwardA(
+    .data1_i    (rs1_exe),
+    .data2_i    (rd_data),
+    .data3_i    (alu_result_mem),
+    .data4_i    (dotcar),
+    .select_i   (forwardA),
+    .data_o     (alu_op1)
+);
+Mux_4_way M4_ForwardB(
     .data1_i    (rs2_exe),
+    .data2_i    (rd_data),
+    .data3_i    (alu_result_mem),
+    .data4_i    (dotcar),
+    .select_i   (forwardB),
+    .data_o     (alu_op2_before_imm)
+);
+Mux_2_way M2_ALU(
+    .data1_i    (alu_op2_before_imm),
     .data2_i    (imm_exe),
     .select_i   (alusrc_exe),
     .data_o     (alu_op2)
 );
+
 
 ALU ALU(
     .op1        (alu_op1),
@@ -142,6 +177,8 @@ EXE_MEM EXE_MEM(
 );
 
 /*******************************************************/ 
+
+// MEM
 
 Data_Memory Data_Memory(
     .clk_i      (clk_i),
@@ -160,7 +197,7 @@ MEM_WB MEM_WB(
 
 /*******************************************************/ 
 
-// Write back
+// WB
 Mux_2_way M2_WB(
     .data1_i    (alu_result_wb),
     .data2_i    (mem_result_wb),

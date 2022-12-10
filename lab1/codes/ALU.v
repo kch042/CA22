@@ -31,5 +31,4 @@ always @(*) begin
 
 end
 
-
 endmodule

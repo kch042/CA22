@@ -34,24 +34,26 @@ endmodule
 
 module ID_EXE (
     clk, 
-    rs1_in, rs2_in, rd_addr_in, imm_in, aluctrl_in, alusrc_in, memwrite_in, memread_in, mem2reg_in, regwrite_in,
-    rs1_out, rs2_out, rd_addr_out, imm_out, aluctrl_out, alusrc_out, memwrite_out, memread_out, mem2reg_out, regwrite_out);
+    rs1_in, rs2_in, rs1_addr_in, rs2_addr_in, rd_addr_in, imm_in, aluctrl_in, alusrc_in, memwrite_in, memread_in, mem2reg_in, regwrite_in,
+    rs1_out, rs2_out, rs1_addr_out, rs2_addr_out, rd_addr_out, imm_out, aluctrl_out, alusrc_out, memwrite_out, memread_out, mem2reg_out, regwrite_out);
 
 input           clk;
 input           alusrc_in, memread_in, memwrite_in, mem2reg_in, regwrite_in;
 input   [3:0]   aluctrl_in;
-input   [4:0]   rd_addr_in;
+input   [4:0]   rs1_addr_in, rs2_addr_in, rd_addr_in;
 input   [31:0]  rs1_in, rs2_in, imm_in;
 
 output  reg             alusrc_out, memread_out, memwrite_out, mem2reg_out, regwrite_out;
 output  reg     [3:0]   aluctrl_out;
-output  reg     [4:0]   rd_addr_out;
+output  reg     [4:0]   rs1_addr_out, rs2_addr_out,rd_addr_out;
 output  reg     [31:0]  rs1_out, rs2_out, imm_out;
 
 
 always @(posedge clk) begin
     rs1_out         <=  rs1_in;
     rs2_out         <=  rs2_in;
+    rs1_addr_out    <=  rs1_addr_in;
+    rs2_addr_out    <=  rs2_addr_in;
     rd_addr_out     <=  rd_addr_in;
     imm_out         <=  imm_in;
 

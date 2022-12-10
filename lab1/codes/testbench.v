@@ -88,7 +88,7 @@ initial begin
 
     // TODO
     // $readmemb("instruction.txt", CPU.Instruction_Memory.memory);
-    $readmemb("../testdata/instruction_1.txt", CPU.Instruction_Memory.memory);
+    $readmemb("../testdata/instruction_2.txt", CPU.Instruction_Memory.memory);
 
     // Open output file
     // Make sure you change back to "output.txt" before submission
