@@ -55,7 +55,7 @@ initial begin
     CPU.Registers.register[30] = 60;
     CPU.Registers.register[31] = 62;
 
-    // TODO: initialize your pipeline registers
+    // initialize your pipeline registers
     CPU.IF_ID.instruction_out   =   0;
     CPU.IF_ID.pc_out            =   0;
 
@@ -85,14 +85,13 @@ initial begin
 
     // Load instructions into instruction memory
     // Make sure you change back to "instruction.txt" before submission
-
-    // TODO
-    // $readmemb("instruction.txt", CPU.Instruction_Memory.memory);
-    $readmemb("../testdata/instruction_3.txt", CPU.Instruction_Memory.memory);
+    $readmemb("instruction.txt", CPU.Instruction_Memory.memory);
+    // $readmemb("../testdata/instruction_2.txt", CPU.Instruction_Memory.memory);
 
     // Open output file
     // Make sure you change back to "output.txt" before submission
-    outfile = $fopen("output_my_3.txt") | 1;
+    outfile = $fopen("output.txt") | 1;
+    // outfile = $fopen("output_my_2.txt") | 1;
     
     Reset = 0;
     Start = 0;
@@ -108,10 +107,9 @@ always@(posedge Clk) begin
     if(counter == num_cycles)    // stop after num_cycles cycles
         $finish;
 
-    // TODO
     // put in your own signal to count stall and flush
-    //if(CPU.Hazard_Detection.Stall_o == 1 && CPU.Control.Branch_o == 0)stall = stall + 1;
-    //if(CPU.Flush == 1)flush = flush + 1;  
+    if(CPU.Hazard_Detection.stall)  stall = stall + 1;
+    if(CPU.IF_ID.flush)    flush = flush + 1;  
 
     // print PC
     // DO NOT CHANGE THE OUTPUT FORMAT

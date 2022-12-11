@@ -92,7 +92,8 @@ IF_ID IF_ID(
     .instruction_out(instruction_id),
     .pc_in          (pc),
     .pc_out         (pc_id),
-    .stall          (stall)
+    .stall          (stall),    
+    .flush          (do_branch)
 );
 
 

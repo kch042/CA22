@@ -13,10 +13,9 @@ always @(*) begin
     case (opcode)
         `OP_STORE:  imm = $signed({ instruction[31:25], instruction[11:7]}); 
         `OP_BEQ:    imm = $signed({ instruction[31], 
-                                    instruction[7], 
+                                    instruction[7],
                                     instruction[30:25], 
-                                    instruction[11:8], 
-                                    1'b0
+                                    instruction[11:8]
                                     });
 
         default:    imm = $signed(  instruction[31:20] );

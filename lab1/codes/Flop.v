@@ -14,25 +14,29 @@
 //     WRITE       READ & PROCESS
 
 
-
 module IF_ID (
     clk,
     instruction_in,
     instruction_out,
     pc_in, 
     pc_out,
-    stall
+    stall,      // load-use hazard
+    flush       // branch hazard
 );
     
 input                   clk;
 input           [31:0]  instruction_in, pc_in;
-input                   stall;
+input                   stall, flush;
 output  reg     [31:0]  instruction_out, pc_out;
 
 always @(posedge clk) begin
     if (stall) begin
             instruction_out <=  instruction_out;
             pc_out          <=  pc_out;
+    end
+    else if (flush) begin
+            instruction_out <=  0;
+            pc_out          <=  0;   
     end
     else begin
             instruction_out <= instruction_in;
