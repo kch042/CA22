@@ -12,7 +12,7 @@ module Forwarding(
     forwardA, forwardB
 );
 
-input       [31:0]  rs1_addr_exe, rs2_addr_exe, rd_addr_mem, rd_addr_wb;
+input       [4:0]   rs1_addr_exe, rs2_addr_exe, rd_addr_mem, rd_addr_wb;
 input               regwrite_mem, regwrite_wb;
 output      [1:0]   forwardA, forwardB;
 

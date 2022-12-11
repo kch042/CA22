@@ -19,14 +19,25 @@ module IF_ID (
     clk,
     instruction_in,
     instruction_out,
+    pc_in, 
+    pc_out,
+    stall
 );
     
 input                   clk;
-input           [31:0]  instruction_in;
-output  reg     [31:0]  instruction_out;
+input           [31:0]  instruction_in, pc_in;
+input                   stall;
+output  reg     [31:0]  instruction_out, pc_out;
 
 always @(posedge clk) begin
-    instruction_out <= instruction_in;
+    if (stall) begin
+            instruction_out <=  instruction_out;
+            pc_out          <=  pc_out;
+    end
+    else begin
+            instruction_out <= instruction_in;
+            pc_out          <= pc_in; 
+    end
 end
 
 endmodule

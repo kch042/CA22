@@ -57,6 +57,7 @@ initial begin
 
     // TODO: initialize your pipeline registers
     CPU.IF_ID.instruction_out   =   0;
+    CPU.IF_ID.pc_out            =   0;
 
     CPU.ID_EXE.rs1_out          =   0; 
     CPU.ID_EXE.rs2_out          =   0; 
@@ -68,7 +69,6 @@ initial begin
     CPU.ID_EXE.memread_out      =   0;
     CPU.ID_EXE.mem2reg_out      =   0;
     CPU.ID_EXE.regwrite_out     =   0;
-
 
     CPU.EXE_MEM.memread_out     =   0;
     CPU.EXE_MEM.memwrite_out    =   0;
@@ -88,11 +88,11 @@ initial begin
 
     // TODO
     // $readmemb("instruction.txt", CPU.Instruction_Memory.memory);
-    $readmemb("../testdata/instruction_2.txt", CPU.Instruction_Memory.memory);
+    $readmemb("../testdata/instruction_3.txt", CPU.Instruction_Memory.memory);
 
     // Open output file
     // Make sure you change back to "output.txt" before submission
-    outfile = $fopen("output.txt") | 1;
+    outfile = $fopen("output_my_3.txt") | 1;
     
     Reset = 0;
     Start = 0;

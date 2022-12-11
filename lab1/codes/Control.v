@@ -3,28 +3,30 @@
 // Control modules generates
 // 1. main control signal
 // 2. aluctrl
-module Control(opcode, funct3, funct7, alusrc, aluctrl, memread, memwrite, mem2reg, regwrite);
+module Control(opcode, funct3, funct7, alusrc, aluctrl, memread, memwrite, mem2reg, regwrite, branch, noop);
 
-input [6:0] opcode;
-input [2:0] funct3;
-input [6:0] funct7;
+input   [6:0]   opcode;
+input   [2:0]   funct3;
+input   [6:0]   funct7;
+input           noop;
 
-output alusrc, memread, memwrite, mem2reg, regwrite;
-output [3:0] aluctrl;
+output          alusrc, memread, memwrite, mem2reg, regwrite, branch;
+output  [3:0]   aluctrl;
 
 /*********** Main Control Signal ***********/
 wire is_r_type, is_i_type, is_load, is_store, is_beq;
-assign is_r_type = (opcode == `OP_R_TYPE);
-assign is_i_type = (opcode == `OP_I_TPYE);
-assign is_load   = (opcode == `OP_LOAD);
-assign is_store  = (opcode == `OP_STORE);
-assign is_beq    = (opcode == `OP_BEQ);
+assign is_r_type = ((!noop) & (opcode == `OP_R_TYPE));
+assign is_i_type = ((!noop) & (opcode == `OP_I_TPYE));
+assign is_load   = ((!noop) & (opcode == `OP_LOAD));
+assign is_store  = ((!noop) & (opcode == `OP_STORE));
+assign is_beq    = ((!noop) & (opcode == `OP_BEQ));
 
 assign regwrite  = is_r_type | is_i_type | is_load;
 assign alusrc    = is_r_type ? 0: 1; 
 assign memread   = is_load;
 assign memwrite  = is_store;
 assign mem2reg   = is_load;
+assign branch    = is_beq;
 
 reg [1:0] aluop;
 always @(*) begin
