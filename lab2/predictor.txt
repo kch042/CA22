@@ -1,0 +1,37 @@
+Let I be a branch instruction
+If I is in ID stage:
+    flush ID/IF                     // previous instruction
+    put PC to be predicted the instruction
+Else if I is in EXE stage:
+    let ok be predicion result
+    if not ok:
+        flush ID/IF                 
+        put PC to be addr(I) + 4
+
+
+0.   000000000000_00000_000_11000_0010011  // addi x24,x0,0
+1.   000000000100_00000_000_11010_0010011  // addi x26,x0,4
+2.   000000000100_00000_000_11100_0010011  // addi x28,x0,4
+3.   111111111111_00000_000_01111_0010011  // addi x15,x0,-1
+4.   0000001_11100_11010_000_11001_0110011 // mul x25,x26,x28
+5.   111111111111_11010_000_11010_0010011  // addi x26,x26,-1
+
+6. (PC=24)   000000000000_11001_010_11011_0000011  // lw x27,0(x25)
+7. (PC=28)   0000000_11011_11000_000_11000_0110011 // add x24,x24,x27
+8. (PC=32)   0000000_01111_11010_000_01000_1100011 // beq x26, x15, 8
+9. (PC=36)   1111111_00000_00000_000_01101_1100011 // beq x0, x0, -20
+10.(PC=40)   0000000_11000_00000_010_11100_0100011 // sw x24, 28(x0)
+
+
+// xx = nop
+cycle   IF(PC)  ID  EXE MEM WB
+6       24
+7       28      24
+8       32      28  24                      // load-use, stall the pipeline
+9       32      28  xx  24  
+10      36      32  28  xx  24              // brach in ID: flush previous instruction and predict taken (put PC = 32+8)
+11      40      xx  32  28  xx              // predicted incorrectly: flush IF/ID, and put PC = 32+4 (nontaken)
+12      36      xx  xx  32  28
+13      40      36  xx  xx  32              // branch in ID: flush previous instruction and predict taken (put PC = 36+(-20) = 16)
+14      16      xx  36  xx  32              // predicted correctly: nothing need to be done
+...
