@@ -110,7 +110,7 @@ always@(posedge Clk) begin
     $fdisplay(outfile, "cycle = %6d, PC = %6d, ", counter, CPU.PC.pc_o);
     $fdisplay(outfile, "Predict = %6d,IFID_Flush = %6d", CPU.Branch_Predictor.predict_o, CPU.IF_ID.flush);
     if (CPU.ID_EXE.branch_instr_out == 1'b1)
-        $fdisplay(outfile, "ALU_out = %6d", CPU.ALU.result);
+        $fdisplay(outfile, "ALU_out = %6d", $signed(CPU.ALU.result));
     
     // print Registers
     // DO NOT CHANGE THE OUTPUT FORMAT

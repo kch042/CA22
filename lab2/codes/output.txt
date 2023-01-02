@@ -168,8 +168,8 @@ Data Memory: 0x1C =      0
 
 
 cycle =      8, PC =     32, 
-Predict =      0,IFID_Flush =      1
-ALU_out = 4294967293
+Predict =      1,IFID_Flush =      1
+ALU_out =     -3
 Registers
 x0 =      0, x8  =      0, x16 =      0, x24 =    -24
 x1 =      1, x9  =      0, x17 =      0, x25 =    -25
@@ -232,7 +232,7 @@ Data Memory: 0x1C =      0
 
 
 cycle =     11, PC =     28, 
-Predict =      1,IFID_Flush =      1
+Predict =      0,IFID_Flush =      1
 ALU_out =      0
 Registers
 x0 =      0, x8  =      0, x16 =      0, x24 =    -24
@@ -317,8 +317,8 @@ Data Memory: 0x1C =      0
 
 
 cycle =     15, PC =     32, 
-Predict =      0,IFID_Flush =      1
-ALU_out = 4294967294
+Predict =      1,IFID_Flush =      1
+ALU_out =     -2
 Registers
 x0 =      0, x8  =      0, x16 =      0, x24 =    -24
 x1 =      2, x9  =      0, x17 =      0, x25 =    -25
@@ -381,7 +381,7 @@ Data Memory: 0x1C =      0
 
 
 cycle =     18, PC =     28, 
-Predict =      1,IFID_Flush =      1
+Predict =      0,IFID_Flush =      1
 ALU_out =      0
 Registers
 x0 =      0, x8  =      0, x16 =      0, x24 =    -24
@@ -466,8 +466,8 @@ Data Memory: 0x1C =      0
 
 
 cycle =     22, PC =     32, 
-Predict =      0,IFID_Flush =      1
-ALU_out = 4294967295
+Predict =      1,IFID_Flush =      1
+ALU_out =     -1
 Registers
 x0 =      0, x8  =      0, x16 =      0, x24 =    -24
 x1 =      3, x9  =      0, x17 =      0, x25 =    -25
@@ -530,7 +530,7 @@ Data Memory: 0x1C =      0
 
 
 cycle =     25, PC =     28, 
-Predict =      1,IFID_Flush =      1
+Predict =      0,IFID_Flush =      1
 ALU_out =      0
 Registers
 x0 =      0, x8  =      0, x16 =      0, x24 =    -24
@@ -722,7 +722,7 @@ Data Memory: 0x1C =      0
 
 
 cycle =     34, PC =     32, 
-Predict =      0,IFID_Flush =      1
+Predict =      1,IFID_Flush =      1
 ALU_out =      5
 Registers
 x0 =      0, x8  =      0, x16 =      0, x24 =    -24
