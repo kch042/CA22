@@ -1,12 +1,19 @@
-Let I be a branch instruction
-If I is in ID stage:
-    flush ID/IF                     // previous instruction
-    put PC to be predicted the instruction
-Else if I is in EXE stage:
-    let ok be predicion result
-    if not ok:
-        flush ID/IF                 
-        put PC to be addr(I) + 4
+let I = a branch instruction
+if I is in ID stage:
+    if predict taken:
+        flush the previous instruction
+        if previous instruction is not branch or not mispredicted:
+            put PC = predicted address 
+else if I is in EXE stage:
+    if misprediction:
+        flush the previous two instruction
+        put PC = addr(I) + 4       
+
+Question:
+    Let instructions be B1, B2, C
+    What will happen if B1 is predicted nontaken and B2 is predicted taken ?
+    How to update the state in predictor?
+
 
 
 0.   000000000000_00000_000_11000_0010011  // addi x24,x0,0
