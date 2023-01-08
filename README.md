@@ -1,22 +1,23 @@
-# Get started
+# CA22
 
-## Compilation
-`-iverilog -o output.out *.v`
+Risc V CPU implementation 
 
-## Simulation
-`-vvp output.out`
+## Contents
++ hw3: single cycle CPU
++ lab1: pipelined CPU + forwarding unit + hazard detection unit
++ lab2: add a 2-bit dynamic branch predictor
+
+## Tools
++ compiler: iverilog
++ simulator: vvp filename
++ debugger: gtkwave
+
+### Compilation
+`$ iverilog -o output.out *.v`
+
+### Simulation
+`$ vvp output.out`
 This command produces `.vcd` file if `$dumpfile` is called in orginial file.
 
-## Wave
-`gtkwave output.vcd`
-
-# Utility
-
-## $dumpfile
-`$dumpfile("file_name")`
-
-## $dumpvars
-usage
-`$dumpvars(level, module)`
-
-Information about module
+### Debugging
+`$ gtkwave output.vcd`

@@ -2,12 +2,11 @@ let I = a branch instruction
 if I is in ID stage:
     if predict taken:
         flush the previous instruction
-        if previous instruction is not branch or not mispredicted:
-            put PC = predicted address 
+        put PC = predicted address 
 else if I is in EXE stage:
     if misprediction:
         flush the previous two instruction
-        put PC = addr(I) + 4       
+        put PC = correct address       
 
 Question:
     Let instructions be B1, B2, C

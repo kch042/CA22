@@ -84,7 +84,7 @@ initial begin
     // TODO
     // Load instructions into instruction memory
     // Make sure you change back to "instruction.txt" before submission
-    $readmemb("../testdata/instruction_2.txt", CPU.Instruction_Memory.memory);
+    $readmemb("instruction.txt", CPU.Instruction_Memory.memory);
     
     // Open output file
     // Make sure you change back to "output.txt" before submission
@@ -95,10 +95,6 @@ initial begin
 
     #(`CYCLE_TIME/4) 
     Reset = 0;
-    
-    //#(`CYCLE_TIME/4) 
-    //Reset = 0;
-    
 end
   
 always@(posedge Clk) begin
